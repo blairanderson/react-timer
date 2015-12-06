@@ -1,7 +1,15 @@
 <!doctype html>
 <html>
+  <head>
+    <link rel="stylesheet" href="/styles.css">
+  </head>
   <body>
-    <div id="content"></div>
     <script src="bundle.js"></script>
+    <div id="timer-container"></div>
+    <script>
+      configTimer({
+        el: "timer-container"
+      })
+    </script>
   </body>
 </html>

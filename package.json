@@ -1,22 +1,26 @@
 {
-  "name": "react-starter",
+  "name": "foobutter",
   "browserify": {
     "transform": [
       "reactify"
     ]
   },
   "scripts": {
-    "build": "NODE_ENV=production browserify main.js | uglifyjs -cm > public/bundle.js",
+    "build": "NODE_ENV=production browserify timer/App.js | uglifyjs -cm > public/bundle.js",
     "start": "ecstatic -p 8000 public",
-    "watch": "watchify main.js -o public/bundle.js -dv"
+    "watch": "watchify timer/App.js -o public/bundle.js -dv"
   },
   "dependencies": {
+    "backbone-model": "^1.0.9",
     "browserify": "^10.2.6",
     "ecstatic": "~0.8.0",
-    "react": "~0.13.3",
-    "reactify": "^1.1.1",
+    "extend-object": "^1.0.0",
+    "localforage": "^1.3.0",
+    "react": "*",
+    "react-dom": "*",
+    "react-select": "^1.0.0-beta6",
+    "reactify": "*",
     "uglify-js": "^2.4.24",
     "watchify": "^3.2.3"
-  },
-  "license": "public domain"
+  }
 }
