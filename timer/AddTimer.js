@@ -11,17 +11,23 @@ module.exports = React.createClass({
   },
 
   render: function() {
-    var returnValues = (<button onClick={this.onClick}>
-      {"Add Timer"}
-    </button>)
-
-    if (this.state.editing) {
-      returnValues = (<TimerForm click={this.onClick}/>);
+    var timerStyle = {
+      display: this.state.editing ? "block" : "none"
     }
 
+    var buttonStyle = {
+      display: this.state.editing ? "none" : "block",
+      textAlign: "right"
+    }
+    
     return (
       <div>
-        {returnValues}
+        <div style={buttonStyle}>
+          <button onClick={this.onClick}>{"Add Timer"}</button>
+        </div>
+        <div style={timerStyle}>
+          <TimerForm click={this.onClick}/>
+        </div>
       </div>
     )
   }

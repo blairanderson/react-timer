@@ -1,6 +1,7 @@
 var Model = require('backbone-model').Model;
 var localforage = require('localforage');
 var extend = require('extend-object');
+var find = require('lodash.find');
 
 var Store = Model.extend({
   defaults: {
@@ -36,9 +37,13 @@ var Store = Model.extend({
     }.bind(this));
   },
 
-  localStorageSync: function(){
-    alert('yolo')
-    localforage.setItem("timers", this.attributes.timers)
+  remove: function(timerToDelete){
+    var timersToPersist = this.get('timers').filter(function(t){
+      return t.created_at != timerToDelete.created_at;
+    })
+
+    this.unset('timers', {silent: true})
+    this.set('timers', timersToPersist)
   },
 
   findOrCreateTimer: function(timer, done) {
@@ -49,8 +54,10 @@ var Store = Model.extend({
     }
 
     var timers = this.attributes.timers;
-    debugger
     if (timer.created_at) {
+      // var timersToPersist = this.attributes.timers.filter(function(t){
+      //   return t.created_at != timerToDelete.created_at;
+      // })
       // find it and update
     } else {
       timer = extend({
@@ -72,6 +79,11 @@ var Store = Model.extend({
 
   getState: function(done){
     return done(null, this.toJSON());
+  },
+
+  localStorageSync: function(){
+    alert('yolo')
+    localforage.setItem("timers", this.attributes.timers)
   }
 });
 var store = new Store();

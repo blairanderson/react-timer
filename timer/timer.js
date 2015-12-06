@@ -1,11 +1,14 @@
-var Timer = function Timer () {
+var Time = require('./time');
+
+var Timer = function Timer (opts) {
+    this.updateText = opts.updateText;
     this.defaultText = "";
     this.expiredMessage = "Time Expired!";
     this.title = "";
     this.label = "";
     this.progress = 0;
     this.startTime = 0;
-    this.endTime = 0;
+    this.endTime = 3600000;
     this.totalTime = 0;
     this.parseError = "";
     this.progressBar = null;
@@ -19,16 +22,13 @@ var Timer = function Timer () {
 };
 
 Timer.prototype.start = function() {
-    if (this.parseError !== "" && this.parseError !== "none") {
-        this.progressText.html(this.defaultText);
-        this.updateText(this.defaultText);
-        return
-    }
+    var first;
     if (this.sequence.length === 0) {
         this.initializeTimer(this.startTime, this.endTime, this.label)
     } else {
-        var first = this.sequence.shift();
-        this.initializeTimer(0, first.duration * 1e3, first.label)
+
+      first = this.sequence.shift();
+      this.initializeTimer(0, first.duration * 1e3, first.label)
     }
 };
 
@@ -42,78 +42,73 @@ Timer.prototype.initializeTimer = function(startTime, endTime, label) {
     this.expiredMessage = this.expiredMessage || "Time Expired" + (label ? ": " : "") + label;
     this.update();
     if (!this.ticker) {
-        this.ticker = setInterval(this.update, 1e3 / 4)
+      this.ticker = setInterval(this.update.bind(this), 1e3 / 4)
     }
 };
 
 Timer.prototype.update = function() {
-    Time.calcTime(this.currDate.getTime(), this.endDate.getTime());
-    this.updateParts(Time)
+    this.updateParts(
+      Time.calcTime(this.currDate.getTime(), this.endDate.getTime())
+    )
 };
 
-Timer.prototype.updateParts = function(Time) {
-    if (Time.totalSeconds < 0) {
+Timer.prototype.updateParts = function(time) {
+    if (time.totalSeconds < 0) {
         this.onTimeComplete();
         return
     }
     var clockTime = [];
     var yearText, monthText, dayText, hourText, minText, secText;
     yearText = monthText = dayText = hourText = minText = secText = "";
-    if (Time.remainingYears > 0) {
-        clockTime.push(padTimeText(Time.remainingYears) + "y");
-        yearText = getTimeText(Time.remainingYears, "year")
+    if (time.remainingYears > 0) {
+        clockTime.push(padTimeText(time.remainingYears) + "y");
+        yearText = getTimeText(time.remainingYears, "year")
     }
-    if (Time.remainingMonths > 0) {
-        clockTime.push(padTimeText(Time.remainingMonths) + "m");
-        monthText = getTimeText(Time.remainingMonths, "month")
+    if (time.remainingMonths > 0) {
+        clockTime.push(padTimeText(time.remainingMonths) + "m");
+        monthText = getTimeText(time.remainingMonths, "month")
     }
-    if (Time.remainingDays > 0) {
-        clockTime.push(padTimeText(Time.remainingDays) + "d");
-        dayText = getTimeText(Time.remainingDays, "day")
+    if (time.remainingDays > 0) {
+        clockTime.push(padTimeText(time.remainingDays) + "d");
+        dayText = getTimeText(time.remainingDays, "day")
     }
-    if (Time.remainingHours > 0) {
-        clockTime.push(padTimeText(Time.remainingHours) + "h");
-        hourText = getTimeText(Time.remainingHours, "hour")
+    if (time.remainingHours > 0) {
+        clockTime.push(padTimeText(time.remainingHours) + "h");
+        hourText = getTimeText(time.remainingHours, "hour")
     }
-    if (Time.remainingMinutes > 0) {
-        clockTime.push(padTimeText(Time.remainingMinutes));
-        minText = getTimeText(Time.remainingMinutes, "minute")
+    if (time.remainingMinutes > 0) {
+        clockTime.push(padTimeText(time.remainingMinutes));
+        minText = getTimeText(time.remainingMinutes, "minute")
     } else {
         clockTime.push(padTimeText(0))
     }
-    if (Time.remainingSeconds > 0) {
-        clockTime.push(padTimeText(Time.remainingSeconds));
-        secText = getTimeText(Time.remainingSeconds, "second")
+    if (time.remainingSeconds > 0) {
+        clockTime.push(padTimeText(time.remainingSeconds));
+        secText = getTimeText(time.remainingSeconds, "second")
     } else {
         clockTime.push(padTimeText(0))
     }
     var slabel = this.label && this.label != "" ? this.label + "<br />" : "";
     var timeText = slabel + yearText + monthText + dayText + hourText + minText + secText;
     this.updateText(timeText);
-    this.progress = (this.totalTime - Time.totalMilliseconds) / this.totalTime;
+    this.progress = (this.totalTime - time.totalMilliseconds) / this.totalTime;
     this.currDate = new Date
 };
 
-Timer.prototype.updateText = function(text) {
-    if (text) {
-      this.progressText.html(text)
-    }
-};
-
 Timer.prototype.onTimeComplete = function() {
-    this.progress = 1;
-    if (this.beep && this.beep.play) {
-        this.beep.volume = this.volume;
-        this.beep.play()
-    }
-    if (this.sequence.length === 0) {
-        clearInterval(this.ticker);
-        this.updateText(this.expiredMessage);
-        this.showAlert()
-    } else {
-        var next = this.sequence.shift();
-        this.initializeTimer(0, next.duration * 1e3, next.label)
-    }
+  this.progress = 1;
+  if (this.beep && this.beep.play) {
+    this.beep.volume = this.volume;
+    this.beep.play()
+  }
+  if (this.sequence.length === 0) {
+    clearInterval(this.ticker);
+    this.updateText(this.expiredMessage);
+    this.showAlert()
+  } else {
+    var next = this.sequence.shift();
+    this.initializeTimer(0, next.duration * 1e3, next.label)
+  }
 };
 
 function getSModifier(value) {

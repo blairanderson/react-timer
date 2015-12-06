@@ -1,8 +1,9 @@
 var React = require('react');
 var ReactDom = require('react-dom');
-var Store = require('./Store.js');
-var AddTimer = require('./AddTimer.js');
-var AppTimer = require('./AppTimer.js');
+var Store = require('./Store');
+var AddTimer = require('./AddTimer');
+var AppTimer = require('./AppTimer');
+var DefaultTimer = require('./DefaultTimer');
 
 var App = React.createClass({
   getInitialState: function(){
@@ -28,14 +29,13 @@ var App = React.createClass({
 
   render: function() {
     var timers = this.state.timers.map(function(timer, index, array){
-      return (<li key={index}>
-        <AppTimer timer={timer} />
-      </li>);
+      return (<AppTimer key={index} timer={timer} />);
     }.bind(this));
 
     return (<div>
       <AddTimer />
-      <ul>
+      <ul style={{listStyle: 'none',paddingLeft: 0, margin: 0}}>
+        <DefaultTimer timer={this.props.timer} />
         {timers}
       </ul>
     </div>);
@@ -45,5 +45,5 @@ var App = React.createClass({
 
 window.configTimer = function configTimer(config){
   var el = document.getElementById(config.el)
-  ReactDom.render(<App start={new Date()} />, el)
+  ReactDom.render(<App timer={config.timer} />, el)
 }

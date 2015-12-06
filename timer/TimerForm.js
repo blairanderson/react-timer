@@ -1,9 +1,10 @@
 var React = require('react');
+var extend = require('extend-object');
 var Hours = require('./Hours');
 var Minutes = require('./Minutes');
 var Name = require('./Name');
-var Store = require('./Store.js');
-var extend = require('extend-object');
+var Store = require('./Store');
+var ClearFloat = require('./ClearFloat')
 
 module.exports = React.createClass({
   getInitialState: function(){
@@ -14,19 +15,21 @@ module.exports = React.createClass({
     };
   },
 
-  onChange: function(newState){
-    this.setState(newState)
+  onChange: function(newState, cb){
+    if (typeof cb === 'function') {
+      this.setState(newState, cb)
+    } else {
+      this.setState(newState)
+    }
   },
 
   createTimer: function(e){
     e.preventDefault();
 
     Store.findOrCreateTimer(extend({}, this.state), function(err){
-      debugger
       if (err){
         alert(err)
       } else {
-        debugger
         this.setState(this.getInitialState())
       }
     }.bind(this))
@@ -40,19 +43,25 @@ module.exports = React.createClass({
 
     return (<div>
       <form>
-        <div style={{width: "35%",float: "left"}}>
-          <Hours hours={this.state.hours} changeHandler={this.onChange} />
-        </div>
         <div style={{width: "30%",float: "left"}}>
+          <label>{"Name"}</label>
           <Name name={this.state.name} changeHandler={this.onChange} />
         </div>
         <div style={{width: "35%",float: "left"}}>
+          <label>{"Hours"}</label>
+          <Hours hours={this.state.hours} changeHandler={this.onChange} />
+        </div>
+        <div style={{width: "35%",float: "left"}}>
+          <label>{"Minutes"}</label>
           <Minutes minutes={this.state.minutes} changeHandler={this.onChange} />
         </div>
-        <div style={{content: "",display: 'table',clear: 'both'}}>
-          <button onClick={this.props.click}>{"cancel"}</button>
+        <ClearFloat />
+        <div>
           {createTimer}
           <span>{JSON.stringify(this.state)}</span>
+          <span style={{float: "right"}}>
+            <button onClick={this.props.click}>{"cancel"}</button>
+          </span>
         </div>
       </form>
     </div>);

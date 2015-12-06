@@ -8,7 +8,14 @@
     <div id="timer-container"></div>
     <script>
       configTimer({
-        el: "timer-container"
+        el: "timer-container",
+        timer: {
+          name: "default cheese timer",
+          hours: 1,
+          minutes: 30,
+          seconds: 0,
+          started: false
+        }
       })
     </script>
   </body>
