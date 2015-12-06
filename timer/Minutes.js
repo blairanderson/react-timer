@@ -16,7 +16,13 @@ var options = Array.apply(null, {length: N})
 
 module.exports = React.createClass({
   onChange: function(item){
-    this.props.changeHandler({minutes: item.value})
+    var newState = {}
+    if (item.value) {
+      newState.minutes = item.value
+    } else {
+      newState.minutes = 0
+    }
+    this.props.changeHandler(newState)
   },
   render: function(){
     return (<ReactSelect

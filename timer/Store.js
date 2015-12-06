@@ -10,8 +10,6 @@ var Store = Model.extend({
       hours: 0,
       minutes: 0,
       seconds: 0,
-      created_at: new Date().getTime(),
-      updated_at: new Date().getTime(),
       started: false
     }
   },
@@ -39,6 +37,7 @@ var Store = Model.extend({
   },
 
   localStorageSync: function(){
+    alert('yolo')
     localforage.setItem("timers", this.attributes.timers)
   },
 
@@ -68,6 +67,7 @@ var Store = Model.extend({
 
     this.unset("timers", {silent: true})
     this.set("timers", timers)
+    done(null)
   },
 
   getState: function(done){
@@ -79,5 +79,4 @@ module.exports = store
 
 window.onbeforeunload = function(e) {
   store.localStorageSync();
-  return 'Are you sure you want to leave?';
 };
