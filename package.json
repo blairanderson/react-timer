@@ -6,7 +6,7 @@
     ]
   },
   "scripts": {
-    "build": "NODE_ENV=production browserify timer/App.js | uglifyjs -cm > public/bundle.js",
+    "build": "NODE_ENV=production browserify timer/App.js | uglifyjs -cm > dist/bundle.js",
     "start": "ecstatic -p 8000 public",
     "watch": "watchify timer/App.js -o public/bundle.js -dv"
   },
