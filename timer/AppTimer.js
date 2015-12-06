@@ -81,7 +81,7 @@ module.exports = React.createClass({
           {remove}
         </span>
       </div>
-      <p>{name}</p>
+      <p>{name}{" "}{hours}{":"}{minutes}</p>
     </div>);
   }
 });

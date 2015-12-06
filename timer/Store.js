@@ -1,7 +1,6 @@
 var Model = require('backbone-model').Model;
 var localforage = require('localforage');
 var extend = require('extend-object');
-var find = require('lodash.find');
 
 var Store = Model.extend({
   defaults: {
@@ -47,8 +46,6 @@ var Store = Model.extend({
   },
 
   findOrCreateTimer: function(timer, done) {
-    var newTimer;
-
     if (!timer.name) {
       return done("Timer needs a name")
     }
