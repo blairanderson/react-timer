@@ -21,6 +21,7 @@ module.exports = React.createClass({
     this.timer = new Timer({
       hours: this.props.timer.hours,
       minutes: this.props.timer.minutes,
+      seconds: this.props.timer.seconds,
       updateText: this.updateText
     });
   },
@@ -43,6 +44,13 @@ module.exports = React.createClass({
     e.preventDefault()
     this.setState({started: true}, function(){
       this.timer.start()
+    }.bind(this))
+  },
+
+  onStop: function(e){
+    e.preventDefault()
+    this.setState({started: false, timerText: 'stopped...'}, function(){
+      this.timer.stop()
     }.bind(this))
   },
 

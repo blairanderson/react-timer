@@ -9,13 +9,19 @@
     <script>
       configTimer({
         el: "timer-container",
-        timer: {
-          name: "default cheese timer",
-          hours: 1,
-          minutes: 30,
-          seconds: 0,
+        timers: [{
+          name: "best",
+          hours: 2,
           started: false
-        }
+        },{
+          name: "minumum",
+          hours: 1,
+          started: false
+        },{
+          name: "maximum",
+          hours: 3,
+          started: false
+        }]
       })
     </script>
   </body>

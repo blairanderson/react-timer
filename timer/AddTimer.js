@@ -3,7 +3,7 @@ var TimerForm = require('./TimerForm');
 
 module.exports = React.createClass({
   getInitialState: function(){
-    return {editing: true}
+    return {editing: false}
   },
   onClick: function(e){
     e.preventDefault()
@@ -19,7 +19,7 @@ module.exports = React.createClass({
       display: this.state.editing ? "none" : "block",
       textAlign: "right"
     }
-    
+
     return (
       <div>
         <div style={buttonStyle}>

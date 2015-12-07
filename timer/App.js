@@ -34,10 +34,19 @@ var App = React.createClass({
 
     return (<div>
       <AddTimer />
-      <ul style={{listStyle: 'none',paddingLeft: 0, margin: 0}}>
-        <DefaultTimer timer={this.props.timer} />
+      <ul style={{listStyle: 'none',paddingLeft: '0', margin: '0'}}>
+        <DefaultTimer
+          timer={this.props.timer}
+          timers={this.props.timers}
+        />
         {timers}
       </ul>
+      <div>
+        <audio id="beepbeep" style={{display: "none"}} preload="auto" autobuffer>
+          <source src="https://cdn.rawgit.com/blairanderson/react-timer/master/public/beepbeep.mp3" type="audio/mpeg" />
+          <source src="https://cdn.rawgit.com/blairanderson/react-timer/master/public/beepbeep.ogg" type="audio/ogg" />
+        </audio>
+      </div>
     </div>);
   }
 })
@@ -45,5 +54,5 @@ var App = React.createClass({
 
 window.configTimer = function configTimer(config){
   var el = document.getElementById(config.el)
-  ReactDom.render(<App timer={config.timer} />, el)
+  ReactDom.render(<App {...config} />, el)
 }

@@ -2,21 +2,21 @@ var Time = require('./time');
 
 var Timer = function Timer (opts) {
     this.updateText = opts.updateText;
-    this.defaultText = "";
+    this.hours = opts.hours || 0
+    this.minutes = opts.minutes || 0
+    this.seconds = opts.seconds || 0
+    this.endTime = (this.seconds*1000) + (this.minutes * 60000) + (this.hours*3600000);
+    console.log(this.endTime);
     this.expiredMessage = "Time Expired!";
     this.title = "";
     this.label = "";
     this.progress = 0;
     this.startTime = 0;
-    this.endTime = 3600000;
     this.totalTime = 0;
-    this.parseError = "";
-    this.progressBar = null;
     this.beep = null;
     this.currDate = null;
     this.endDate = null;
     this.ticker = null;
-    this.startButton = null;
     this.volume = 1;
     this.sequence = [];
 };
@@ -30,6 +30,11 @@ Timer.prototype.start = function() {
       first = this.sequence.shift();
       this.initializeTimer(0, first.duration * 1e3, first.label)
     }
+};
+
+Timer.prototype.stop = function() {
+  clearInterval(this.ticker)
+  this.ticker = null;
 };
 
 Timer.prototype.initializeTimer = function(startTime, endTime, label) {
